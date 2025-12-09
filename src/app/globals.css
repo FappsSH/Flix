@@ -1,0 +1,336 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   CSS VARIABLES - TEMA PADRÃO (NETFLIX STYLE)
+   ============================================================================
+   Essas variáveis são sobrescritas dinamicamente pelo middleware
+   com base nas configurações do Tenant (whitelabel).
+   ============================================================================ */
+
+:root {
+  /* ===== CORES PRIMÁRIAS (Whitelabel - Padrão Netflix) ===== */
+  --color-primary: 229 9 20;           /* #E50914 - Vermelho Netflix */
+  --color-primary-hover: 197 8 17;     /* #C50811 - Hover mais escuro */
+  --color-primary-light: 255 51 66;    /* #FF3342 - Mais claro (15%) */
+  --color-primary-dark: 153 6 12;      /* #99060C - Mais escuro (30%) */
+
+  /* ===== CORES SECUNDÁRIAS (Cinza escuro) ===== */
+  --color-secondary: 47 47 47;         /* #2F2F2F */
+  --color-secondary-hover: 64 64 64;   /* #404040 - Hover mais claro */
+  --color-secondary-light: 80 80 80;   /* #505050 */
+  --color-secondary-dark: 30 30 30;    /* #1E1E1E */
+
+  /* ===== BACKGROUNDS (Netflix dark theme) ===== */
+  --color-background: 20 20 20;        /* #141414 - Quase preto */
+  --color-background-card: 47 47 47;   /* #2F2F2F - Cards */
+  --color-background-hover: 64 64 64;  /* #404040 - Hover em cards */
+
+  /* ===== TEXTOS ===== */
+  --color-text: 255 255 255;           /* #FFFFFF - Branco */
+  --color-text-secondary: 179 179 179; /* #B3B3B3 - Cinza claro */
+  --color-text-muted: 115 115 115;     /* #737373 - Cinza mais escuro */
+
+  /* ===== TIPOGRAFIA ===== */
+  --font-family: 'Inter', system-ui, sans-serif;
+
+  /* ===== OUTROS (shadcn/ui compatibility) ===== */
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 229 9 20;
+  --radius: 0.5rem;
+}
+
+/* ============================================================================
+   TEMA POR TENANT (Injetado dinamicamente via middleware)
+   ============================================================================
+   Exemplo: Para o tenant "academia-xyz" com tema azul:
+
+   [data-tenant="academia-xyz"] {
+     --color-primary: 59 130 246;      // #3B82F6 (azul)
+     --color-primary-hover: 37 99 235;
+     --font-family: 'Roboto', sans-serif;
+   }
+   ============================================================================ */
+
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-text font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Headings */
+  h1 {
+    @apply text-hero;
+  }
+  h2 {
+    @apply text-title;
+  }
+  h3 {
+    @apply text-heading;
+  }
+  h4 {
+    @apply text-subheading;
+  }
+
+  /* Links */
+  a {
+    @apply text-primary hover:text-primary-light transition-colors duration-200;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-primary text-white;
+  }
+
+  /* Scrollbar personalizada (estilo Netflix) */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-secondary rounded-lg;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-secondary-hover;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-secondary)) rgb(var(--color-background));
+  }
+}
+
+/* ============================================================================
+   COMPONENT STYLES
+   ============================================================================ */
+
+@layer components {
+  /* Container Netflix-style */
+  .container-netflix {
+    @apply max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Card Netflix com hover */
+  .netflix-card {
+    @apply bg-background-card rounded-lg overflow-hidden transition-all duration-300 ease-out;
+  }
+
+  .netflix-card:hover {
+    @apply scale-105 shadow-netflix z-10;
+  }
+
+  /* Card com hover expandido (mostra mais detalhes) */
+  .netflix-card-expand {
+    @apply relative bg-background-card rounded-lg overflow-hidden transition-all duration-300 ease-out;
+  }
+
+  .netflix-card-expand:hover {
+    @apply scale-110 shadow-netflix-lg z-20;
+  }
+
+  /* Botão primário */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-white font-semibold px-6 py-3 rounded-md transition-all duration-200 ease-out hover:scale-105 hover:shadow-lg;
+  }
+
+  /* Botão secundário */
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary-hover text-white font-semibold px-6 py-3 rounded-md transition-all duration-200 ease-out hover:scale-105;
+  }
+
+  /* Botão outline */
+  .btn-outline {
+    @apply border-2 border-text-secondary text-text-secondary hover:border-text hover:text-text font-semibold px-6 py-3 rounded-md transition-all duration-200 ease-out hover:scale-105;
+  }
+
+  /* Input field */
+  .input-field {
+    @apply w-full bg-background-card border-2 border-secondary text-text px-4 py-3 rounded-md focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    @apply w-full bg-secondary rounded-full h-1 overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply bg-primary h-full transition-all duration-300 ease-out;
+  }
+
+  /* Badge/Tag */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary/20 text-primary;
+  }
+
+  /* Hero gradient overlay (Netflix style) */
+  .hero-gradient {
+    @apply absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent;
+  }
+
+  /* Skeleton loader */
+  .skeleton {
+    @apply animate-pulse bg-secondary rounded-md;
+  }
+}
+
+/* ============================================================================
+   UTILITY STYLES
+   ============================================================================ */
+
+@layer utilities {
+  /* Hide scrollbar mantendo funcionalidade */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Scroll horizontal suave (carrossel Netflix) */
+  .scroll-smooth-horizontal {
+    @apply overflow-x-auto overflow-y-hidden scroll-smooth hide-scrollbar;
+  }
+
+  /* Text truncate multiline */
+  .line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Glassmorphism effect */
+  .glass {
+    @apply backdrop-blur-md bg-background-card/30 border border-secondary/50;
+  }
+
+  /* Hover scale (Netflix cards) */
+  .hover-scale {
+    @apply transition-transform duration-300 ease-out hover:scale-105;
+  }
+
+  /* Shimmer effect (loading) */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgb(var(--color-secondary)) 0%,
+      rgb(var(--color-secondary-hover)) 50%,
+      rgb(var(--color-secondary)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* Focus visible (acessibilidade) */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background;
+  }
+
+  /* Aspect ratios (Netflix style) */
+  .aspect-video-wide {
+    aspect-ratio: 16 / 9;
+  }
+
+  .aspect-poster {
+    aspect-ratio: 2 / 3;
+  }
+
+  .aspect-square {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE UTILITIES
+   ============================================================================ */
+
+/* Mobile first: hide on mobile, show on desktop */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Show only on mobile */
+@media (min-width: 769px) {
+  .show-mobile {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   DARK MODE OVERRIDES
+   ============================================================================
+   Por padrão, a plataforma é dark mode.
+   Se o tenant quiser light mode, isso pode ser configurado.
+   ============================================================================ */
+
+.light-mode {
+  --color-background: 255 255 255;
+  --color-background-card: 243 244 246;
+  --color-background-hover: 229 231 235;
+  --color-text: 0 0 0;
+  --color-text-secondary: 75 85 99;
+  --color-text-muted: 156 163 175;
+}
