@@ -1,27 +1,7 @@
-import { getDashboardMetrics, getRecentTenants, getRevenueChartData } from '@/actions/super-admin/dashboard'
-import { StatsCard } from '@/components/super-admin/stats-card'
-import { RevenueChart } from '@/components/super-admin/revenue-chart'
-import { RecentTenants } from '@/components/super-admin/recent-tenants'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Building2, TrendingUp, Users, BookOpen, DollarSign, AlertCircle } from 'lucide-react'
-import { formatCurrency } from '@/lib/utils'
 
-export default async function SuperAdminDashboard() {
-  const metricsResult = await getDashboardMetrics()
-  const recentTenantsResult = await getRecentTenants(5)
-  const revenueChartResult = await getRevenueChartData()
-
-  if (!metricsResult.success || !metricsResult.data) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-error">Erro ao carregar métricas do dashboard</p>
-      </div>
-    )
-  }
-
-  const metrics = metricsResult.data
-  const recentTenants = recentTenantsResult.success ? recentTenantsResult.data : []
-  const revenueData = revenueChartResult.success ? revenueChartResult.data : []
-
+export default function SuperAdminDashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -34,69 +14,156 @@ export default async function SuperAdminDashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <StatsCard
-          title="Total de Tenants"
-          value={metrics.totalTenants}
-          icon={Building2}
-          trend={metrics.newTenantsThisMonth > 0 ? `+${metrics.newTenantsThisMonth} este mês` : undefined}
-        />
-        <StatsCard
-          title="MRR (Receita Mensal)"
-          value={formatCurrency(metrics.mrr)}
-          icon={DollarSign}
-          trend={metrics.mrrGrowth > 0 ? `+${metrics.mrrGrowth.toFixed(1)}%` : undefined}
-          trendUp={metrics.mrrGrowth > 0}
-        />
-        <StatsCard
-          title="ARR (Receita Anual)"
-          value={formatCurrency(metrics.arr)}
-          icon={TrendingUp}
-        />
-        <StatsCard
-          title="Assinaturas Ativas"
-          value={metrics.activeSubscriptions}
-          icon={Building2}
-          description="Tenants com pagamento em dia"
-        />
-        <StatsCard
-          title="Em Trial"
-          value={metrics.tenantsInTrial}
-          icon={Building2}
-          description="Tenants testando a plataforma"
-        />
-        <StatsCard
-          title="Pagamento Atrasado"
-          value={metrics.pastDueSubscriptions}
-          icon={AlertCircle}
-          description="Requer atenção"
-          variant="warning"
-        />
-        <StatsCard
-          title="Total de Alunos"
-          value={metrics.totalStudents}
-          icon={Users}
-          description="Em todos os tenants"
-        />
-        <StatsCard
-          title="Total de Cursos"
-          value={metrics.totalCourses}
-          icon={BookOpen}
-          description="Em todos os tenants"
-        />
+        {/* Total de Tenants */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total de Tenants</CardTitle>
+            <Building2 className="h-4 w-4 text-text-secondary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">12</div>
+            <p className="text-xs text-text-secondary mt-1">
+              +2 este mês
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* MRR */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">MRR (Receita Mensal)</CardTitle>
+            <DollarSign className="h-4 w-4 text-text-secondary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">R$ 12.500</div>
+            <p className="text-xs text-success mt-1">
+              +15.3%
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* ARR */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">ARR (Receita Anual)</CardTitle>
+            <TrendingUp className="h-4 w-4 text-text-secondary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">R$ 150.000</div>
+            <p className="text-xs text-text-secondary mt-1">
+              Projeção anual
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Assinaturas Ativas */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Assinaturas Ativas</CardTitle>
+            <Building2 className="h-4 w-4 text-text-secondary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">8</div>
+            <p className="text-xs text-text-secondary mt-1">
+              Tenants com pagamento em dia
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Em Trial */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Em Trial</CardTitle>
+            <Building2 className="h-4 w-4 text-text-secondary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">3</div>
+            <p className="text-xs text-text-secondary mt-1">
+              Testando a plataforma
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Pagamento Atrasado */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Pagamento Atrasado</CardTitle>
+            <AlertCircle className="h-4 w-4 text-warning" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-warning">1</div>
+            <p className="text-xs text-text-secondary mt-1">
+              Requer atenção
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Total de Alunos */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total de Alunos</CardTitle>
+            <Users className="h-4 w-4 text-text-secondary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">1.234</div>
+            <p className="text-xs text-text-secondary mt-1">
+              Em todos os tenants
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Total de Cursos */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total de Cursos</CardTitle>
+            <BookOpen className="h-4 w-4 text-text-secondary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">45</div>
+            <p className="text-xs text-text-secondary mt-1">
+              Em todos os tenants
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* Charts & Tables Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Revenue Chart */}
-        <div className="lg:col-span-2">
-          <RevenueChart data={revenueData || []} />
-        </div>
-
-        {/* Recent Tenants */}
-        <div className="lg:col-span-1">
-          <RecentTenants tenants={recentTenants || []} />
-        </div>
-      </div>
+      {/* Recent Activity */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Tenants Recentes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-background-card rounded-lg border border-secondary">
+              <div>
+                <p className="font-semibold text-text">Academia XYZ</p>
+                <p className="text-sm text-text-secondary">academia-xyz.flix.com</p>
+              </div>
+              <span className="px-3 py-1 bg-primary/20 text-primary text-sm rounded-full">
+                Trial
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-background-card rounded-lg border border-secondary">
+              <div>
+                <p className="font-semibold text-text">Escola Tech</p>
+                <p className="text-sm text-text-secondary">escolatech.flix.com</p>
+              </div>
+              <span className="px-3 py-1 bg-success/20 text-success text-sm rounded-full">
+                Ativo
+              </span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-background-card rounded-lg border border-secondary">
+              <div>
+                <p className="font-semibold text-text">Cursos Online Brasil</p>
+                <p className="text-sm text-text-secondary">cursos.brasil.com</p>
+              </div>
+              <span className="px-3 py-1 bg-success/20 text-success text-sm rounded-full">
+                Ativo
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
